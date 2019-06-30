@@ -83,5 +83,16 @@ class FlaskrTestCase(unittest.TestCase):
         data = json.loads(rv.data)
         self.assertEqual(data['status'], 1)
 
+    def search_test(self):
+        rv = self.app.post('/add', data=dict(
+            title='<Hello>',
+            text='<strong>HTML</strong> allowed here'
+        ), follow_redirects=True)
+        data = json.loads(rv.data)
+        dv = self.app.get('/search/', data=dict(
+            query='HTML'))
+
+        self.assertTrue(dv.entries)
+
 if __name__ == "__main__":
     unittest.main()
